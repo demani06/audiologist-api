@@ -3,3 +3,4 @@
 - This API uses H2 database backed by a file storage for simplicity
 - The API uses Swagger documentation. 
 - Swagger UI provides an UI to view the endpoints and also one can test the endpoints directly from - this UI
+- Only unit test cases are provided and these can be extended to write the integration test cases
