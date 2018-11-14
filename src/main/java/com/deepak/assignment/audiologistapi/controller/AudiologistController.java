@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is a controller class which exposes the endpoints required for Audiologist to do below activities
@@ -51,14 +52,20 @@ public class AudiologistController {
         log.debug("createAppointments start");
         //ToDO return 201 for created, 400 for any validations exceptions in the request, 500 for any server error
 
-        CustomerAppointmentDTO customerAppointmentDTO = getCustomerAppointmentDTOFromRequest(customerAppointment);
-
+        //Check if the customer exists in DB, else return 404 from the API
+        Optional<Customer> customerOptional = audiologistService.findCustomerById(customerAppointment.getCustomerId());
         HttpHeaders responseHeaders = new HttpHeaders();
 
-        if (customerAppointmentDTO == null) { //Some exception when parsing the amount and date fields
-            return new ResponseEntity<String>("Parsing failed or transaction date is a future date", responseHeaders, HttpStatus.UNPROCESSABLE_ENTITY);
+        if (!customerOptional.isPresent()) {
+            return new ResponseEntity<String>("Customer not found in the application", responseHeaders, HttpStatus.NOT_FOUND);
         }
 
+        CustomerAppointmentDTO customerAppointmentDTO = getCustomerAppointmentDTOFromRequest(customerAppointment, customerOptional.get());
+
+        //Return 422 for parisng exceptions of the appointment date
+        if (customerAppointmentDTO == null) { //Some exception when parsing the amount and date fields
+            return new ResponseEntity<String>("Parsing of the appointment date failed", responseHeaders, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
         customerAppointmentService.saveAppointment(customerAppointmentDTO);
 
         // Response code 201
@@ -80,7 +87,7 @@ public class AudiologistController {
     }
 
 
-    private CustomerAppointmentDTO getCustomerAppointmentDTOFromRequest(@Valid CustomerAppointment customerAppointment) {
+    private CustomerAppointmentDTO getCustomerAppointmentDTOFromRequest(CustomerAppointment customerAppointment, Customer customer) {
         log.debug("creating appointment DTO object from request..");
         //if date is a past date return null
 
@@ -94,9 +101,10 @@ public class AudiologistController {
             log.error("Parsing Exception , e =" + exception);
             return null;
         }
+
         CustomerAppointmentDTO customerAppointmentDTO = CustomerAppointmentDTO.builder().
                 appointmentTimeStamp(appointmentDateTime).
-                customerId(customerAppointment.getCustomerId())
+                customer(customer)
                 .build();
 
         return customerAppointmentDTO;

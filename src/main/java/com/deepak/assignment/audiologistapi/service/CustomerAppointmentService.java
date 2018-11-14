@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/*
+ * Appointments service wrapper for Customer which interacts with Cutomer Appointment DB Repository
+ * */
+
 @Service
 public class CustomerAppointmentService {
 

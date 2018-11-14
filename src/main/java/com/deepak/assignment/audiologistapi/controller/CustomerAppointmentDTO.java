@@ -1,24 +1,24 @@
 package com.deepak.assignment.audiologistapi.controller;
 
+import com.deepak.assignment.audiologistapi.domain.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
 @Data
-@Entity
+@Entity(name = "customer_appointments")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CustomerAppointmentDTO {
 
     @JsonIgnore
@@ -26,11 +26,13 @@ public class CustomerAppointmentDTO {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int customerAppointmentId;
 
-    @JsonProperty("customer_id")
-    @NotNull
-    private int customerId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
+    Customer customer;
+
 
     @JsonProperty("appointment_time")
     @NotNull
     private ZonedDateTime appointmentTimeStamp;
+
 }
