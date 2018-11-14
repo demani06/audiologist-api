@@ -1,9 +1,9 @@
 # audiologist-api
 
 TODO
-1. H2 database run externally
-2. Swagger documentation tags
-3. Dockerise
+1. H2 database run externally - done
+2. Apply Security - Pending
+3. Dockerise - Pending
 
 
 
