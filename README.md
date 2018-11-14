@@ -1,7 +1,8 @@
 # audiologist-api
 
-TODO
-1. H2 database run externally - done
+# TODO
+1. a. H2 database run externally - done
+   b. Create Audiologist entity and save in customer appointments table
 2. Apply Security - Pending
 3. Dockerise - Pending
 
