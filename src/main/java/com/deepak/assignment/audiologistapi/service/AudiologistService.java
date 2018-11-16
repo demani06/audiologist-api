@@ -1,6 +1,8 @@
 package com.deepak.assignment.audiologistapi.service;
 
+import com.deepak.assignment.audiologistapi.domain.Audiologist;
 import com.deepak.assignment.audiologistapi.domain.Customer;
+import com.deepak.assignment.audiologistapi.repository.AudiologistRepository;
 import com.deepak.assignment.audiologistapi.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class AudiologistService {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    AudiologistRepository audiologistRepository;
+
     public void saveCustomer(@Valid Customer customer) {
         log.debug("saving customer .....");
         customerRepository.save(customer);
@@ -31,5 +36,12 @@ public class AudiologistService {
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         log.debug("saved customer...");
         return customerOptional;
+    }
+
+    public Optional<Audiologist> findAudiologistById(int audiologistId) {
+        log.debug("get findAudiologistById by id .....");
+        Optional<Audiologist> audiologistOptional = audiologistRepository.findById(audiologistId);
+        log.debug("audiologistOptional ={}", audiologistOptional);
+        return audiologistOptional;
     }
 }

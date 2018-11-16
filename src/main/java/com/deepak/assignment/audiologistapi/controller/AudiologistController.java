@@ -1,7 +1,6 @@
 package com.deepak.assignment.audiologistapi.controller;
 
-import com.deepak.assignment.audiologistapi.domain.Customer;
-import com.deepak.assignment.audiologistapi.domain.CustomerAppointment;
+import com.deepak.assignment.audiologistapi.domain.*;
 import com.deepak.assignment.audiologistapi.service.AudiologistService;
 import com.deepak.assignment.audiologistapi.service.CustomerAppointmentService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,13 +54,20 @@ public class AudiologistController {
 
         //Check if the customer exists in DB, else return 404 from the API
         Optional<Customer> customerOptional = audiologistService.findCustomerById(customerAppointment.getCustomerId());
+
+        //Check if the audiologist exists in DB, else return 404 from the API
+        Optional<Audiologist> audiologistOptional = audiologistService.findAudiologistById(customerAppointment.getAudiologistId());
         HttpHeaders responseHeaders = new HttpHeaders();
 
         if (!customerOptional.isPresent()) {
             return new ResponseEntity<String>("Customer not found in the application", responseHeaders, HttpStatus.NOT_FOUND);
         }
 
-        CustomerAppointmentDTO customerAppointmentDTO = getCustomerAppointmentDTOFromRequest(customerAppointment, customerOptional.get());
+        if (!audiologistOptional.isPresent()) {
+            return new ResponseEntity<String>("Audiologist not found in the application", responseHeaders, HttpStatus.NOT_FOUND);
+        }
+
+        CustomerAppointmentDTO customerAppointmentDTO = getCustomerAppointmentDTOFromRequest(customerAppointment, customerOptional.get(), audiologistOptional.get());
 
         //Return 422 for parisng exceptions of the appointment date
         if (customerAppointmentDTO == null) { //Some exception when parsing the amount and date fields
@@ -77,24 +84,32 @@ public class AudiologistController {
      * Gets list of all appointments
      * */
 
-    @GetMapping("/appointments")
-    public List<CustomerAppointmentDTO> getAppointments() {
+    @GetMapping("/appointments/{audiologistId}")
+    public List<CustomerAppointmentResponse> getAppointments(@PathVariable int audiologistId, @RequestParam(required = false) String allResults) {
         log.debug("getAppointments start");
         //ToDO return 200 for created, 400 for any validations exceptions in the request,
         // 404 for audiologist not found
         // 500 for any server error
-        return customerAppointmentService.getAllAppointments();
+
+        boolean fetchAllRecords = false;
+
+        if (!StringUtils.isEmpty(allResults) && allResults.trim().equalsIgnoreCase("yes")) {
+            fetchAllRecords = true;
+        }
+
+
+        return customerAppointmentService.getAllAppointments(audiologistId, fetchAllRecords);
     }
 
 
-    private CustomerAppointmentDTO getCustomerAppointmentDTOFromRequest(CustomerAppointment customerAppointment, Customer customer) {
+    private CustomerAppointmentDTO getCustomerAppointmentDTOFromRequest(CustomerAppointment customerAppointment, Customer customer, Audiologist audiologist) {
         log.debug("creating appointment DTO object from request..");
         //if date is a past date return null
 
-        ZonedDateTime appointmentDateTime = null;
+        LocalDateTime appointmentDateTime = null;
 
         try {
-            appointmentDateTime = ZonedDateTime.parse(customerAppointment.getAppointmentTimeStamp());
+            appointmentDateTime = LocalDateTime.parse(customerAppointment.getAppointmentTimeStamp());
         } catch (Exception exception) {
             //Any parsing exceptions we return null object and return the valid code in the controller
             //We can either use the Controller Advise and do the response re direction with the required status code
@@ -102,9 +117,10 @@ public class AudiologistController {
             return null;
         }
 
-        CustomerAppointmentDTO customerAppointmentDTO = CustomerAppointmentDTO.builder().
-                appointmentTimeStamp(appointmentDateTime).
-                customer(customer)
+        CustomerAppointmentDTO customerAppointmentDTO = CustomerAppointmentDTO.builder()
+                .appointmentTimeStamp(appointmentDateTime)
+                .customer(customer)
+                .audiologist(audiologist)
                 .build();
 
         return customerAppointmentDTO;

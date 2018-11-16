@@ -13,14 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Customer {
+public class Audiologist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "customer_id")
-    private int customerId;
+    @Column(name = "audiologist_id")
+    private int audiologistId;
     private String firstName;
     private String lastName;
-    private int age;
-    private long phoneNumber;
 }
