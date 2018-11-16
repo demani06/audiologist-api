@@ -1,12 +1,14 @@
 # audiologist-api
 
-# TODO
-1. a. H2 database run externally - done
-   b. Create Audiologist entity and save in customer appointments table
-2. Apply Security - Pending
-3. Dockerise - Pending
+## TODO
+1. H2 database run externally - done
+2. Create Audiologist entity and save in customer appointments table - pending
+3. Apply Security - Pending
+4. Exception hanlding and test cases - pending
+4. Dockerise - Pending
 
 
+## General Documentation about the API 
 
 - This API uses H2 database backed by a file storage for simplicity
 - The API uses Swagger documentation. 
