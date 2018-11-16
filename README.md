@@ -4,7 +4,7 @@
 1. H2 database run externally - done
 2. Create Audiologist entity and save in customer appointments table - pending
 3. Apply Security - Pending
-4. Exception hanlding and test cases
+4. Exception hanlding and test cases - pending
 4. Dockerise - Pending
 
 
