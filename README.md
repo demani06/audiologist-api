@@ -1,6 +1,7 @@
 # audiologist-api
 
 ## Few of the Design considerations
+- App to be developed on Spring boot and Rest API
 - Followed Domain driven design, so first step is to design the Entities.
 - This project would be having following entities
     1. Audiologist (to hold the Audiologist data)
