@@ -16,8 +16,7 @@
 - Did not consider security to differentiate an audiologist and a customer, the assumption is that it is already done or not needed as mentioned in the requirements document
 - Exception handling to be done by the global exception handler
 - Logging to be done by Sl4j/logback  
-- Minimum test coverage considering the time frame
-- Note date-time format for appointment to follow the format **yyyy-mm-ddThh:mi** (where T is format required for LocalDateTime to parse) .Ex - 2018-11-22T13:59
+
 
 ## API spec
 
@@ -41,12 +40,13 @@
 
 
 ## General Documentation about the API 
-
 - This API uses H2 database backed by a file storage for simplicity
 - The API uses Swagger documentation. 
 - Swagger UI provides an UI to view the endpoints and also one can test the endpoints directly from - this UI
 - Only unit test cases are provided and these can be extended to write the integration test cases
 - Logging for microservices can be done using Sleuth API which can be integrated with Zipkin, but not used in this application
+- Minimum test coverage considering the time frame
+- Note date-time format for appointment to follow the format **yyyy-mm-ddThh:mi** (where T is format required for LocalDateTime to parse) .Ex - 2018-11-22T13:59
 
 ## Swagger URL for the application after starting the service
 Swagger UI - http://localhost:8080/swagger-ui.html#
