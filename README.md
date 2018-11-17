@@ -17,6 +17,7 @@
 - Exception handling to be done by the global exception handler
 - Logging to be done by Sl4j/logback  
 - Minimum test coverage considering the time frame
+- Note date-time format for appointment to follow the format **yyyy-mm-ddThh:mi** (where T is format required for LocalDateTime to parse) .Ex - 2018-11-22T13:59
 
 ## API spec
 
