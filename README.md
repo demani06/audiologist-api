@@ -27,7 +27,7 @@
 |/api/audiologist/appointments/{audiologistId}?allResults=true|	as an audiologist I want to get a list of all appointments and their ratings	|GET|
 |/api/audiologist/appointments/{audiologistId}	|as an audiologist I want to get a list of the next week’s appointments|	GET|
 |/api/customer/{customerId}/appointment	|as a customer I want to get the next appointment	|GET|
-|/api/customer/{customerId}/appointment/rating	|as a customer I want to rate the last appointment	|POST|
+|/api/customer/{customerId}/appointment	|as a customer I want to rate the last appointment	|POST|
 
 
 
