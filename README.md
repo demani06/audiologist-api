@@ -22,7 +22,7 @@
 |API URI	                                |API description	                                         |Method|
 |------------------------------------------ |------------------------------------------------------------|-------|
 |/api/audiologist/customer	                |as an audiologist I want to create a new customer entry	 | POST|
-|/api/audiologist/appointments	|as an audiologist I want to create appointments with a customer	         |POST|
+|/api/audiologist/appointment	|as an audiologist I want to create appointments with a customer	         |POST|
 |/api/audiologist/appointments/{audiologistId}?allResults=true|	as an audiologist I want to get a list of all appointments and their ratings	|GET|
 |/api/audiologist/appointments/{audiologistId}	|as an audiologist I want to get a list of the next week’s appointments|	GET|
 |/api/customer/appointment	|as a customer I want to get the next appointment	|GET|
