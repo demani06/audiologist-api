@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface repository for Customer appointment related DB operations
@@ -18,6 +19,10 @@ public interface CustomerAppointmentRepository extends JpaRepository<CustomerApp
 
     List<CustomerAppointmentDTO> findByAudiologist_audiologistId(Integer audiologistId);
 
+    /*
+     * Custom query to get the appointments between two dates
+     * */
+    //TODO add the audiologist parameter in the query
     @Query("select c from com.deepak.assignment.audiologistapi.domain.CustomerAppointmentDTO c" +
             " where c.appointmentTimeStamp <= :endDateTime " +
             "and c.appointmentTimeStamp > :startDateTime ")
@@ -28,8 +33,12 @@ public interface CustomerAppointmentRepository extends JpaRepository<CustomerApp
             @Param("audiologistId") Integer audiologistId*/
     );
 
+    /*
+     * Custom query to get the latest appointment for a Customer
+     * */
+    Optional<CustomerAppointmentDTO> findFirst1ByCustomer_customerIdOrderByAppointmentTimeStampAsc(Integer customerId);
 
-
+    Optional<CustomerAppointmentDTO> findFirst1ByCustomer_customerIdAndAppointmentTimeStampBeforeOrderByAppointmentTimeStampAsc(Integer customerId, LocalDateTime localDateTime);
 
 
 }

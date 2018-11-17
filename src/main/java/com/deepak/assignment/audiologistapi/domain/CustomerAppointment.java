@@ -27,4 +27,7 @@ public class CustomerAppointment {
     @NotNull
     private String appointmentTimeStamp;
 
+    private int rating;
+    private String ratingComments;
+
 }

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /*
  * Appointments service wrapper for Customer which interacts with Cutomer Appointment DB Repository
@@ -56,9 +57,19 @@ public class CustomerAppointmentService {
             }
         }
 
-
         return appointmentResponseList;
 
 
+    }
+
+    public Optional<CustomerAppointmentDTO> getNextAppointmentForCustomer(int customerId) {
+        log.debug("getNextAppointmentForCustomer ..");
+        return customerAppointmentRepository.findFirst1ByCustomer_customerIdOrderByAppointmentTimeStampAsc(customerId);
+    }
+
+    public Optional<CustomerAppointmentDTO> getLastAppointmentForCustomer(int customerId) {
+        log.debug("getLastAppointmentForCustomer ..");
+
+        return customerAppointmentRepository.findFirst1ByCustomer_customerIdAndAppointmentTimeStampBeforeOrderByAppointmentTimeStampAsc(customerId, LocalDateTime.now());
     }
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -19,8 +20,11 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "customer_id")
     private int customerId;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
     private int age;
+    @NotNull
     private long phoneNumber;
 }

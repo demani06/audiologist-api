@@ -34,7 +34,7 @@ public class AudiologistController {
     @Autowired
     CustomerAppointmentService customerAppointmentService;
 
-    @PostMapping("/customer")
+    @PostMapping("/audiologist/customer")
     public ResponseEntity<?> createCustomer(@Valid @RequestBody Customer customer) {
         log.debug("createCustomer method start");
 
@@ -47,7 +47,7 @@ public class AudiologistController {
         return new ResponseEntity<String>("Successfully created the Customer", responseHeaders, HttpStatus.CREATED);
     }
 
-    @PostMapping("/appointment")
+    @PostMapping("/audiologist/appointment")
     public ResponseEntity<?> createAppointments(@Valid @RequestBody CustomerAppointment customerAppointment) {
         log.debug("createAppointments start");
         //ToDO return 201 for created, 400 for any validations exceptions in the request, 500 for any server error
@@ -84,12 +84,9 @@ public class AudiologistController {
      * Gets list of all appointments
      * */
 
-    @GetMapping("/appointments/{audiologistId}")
+    @GetMapping("/audiologist/appointments/{audiologistId}")
     public List<CustomerAppointmentResponse> getAppointments(@PathVariable int audiologistId, @RequestParam(required = false) String allResults) {
         log.debug("getAppointments start");
-        //ToDO return 200 for created, 400 for any validations exceptions in the request,
-        // 404 for audiologist not found
-        // 500 for any server error
 
         boolean fetchAllRecords = false;
 
@@ -100,6 +97,39 @@ public class AudiologistController {
 
         return customerAppointmentService.getAllAppointments(audiologistId, fetchAllRecords);
     }
+
+
+    /*
+     * Gets next appointment for the customer  $(customer id)
+     * */
+
+    @GetMapping("/customer/{customerId}/appointment")
+    public Optional<CustomerAppointmentDTO> getNextAppointmentForCustomer(@PathVariable int customerId) {
+        log.debug("getNextAppointmentForCustomer start");
+
+        Optional<CustomerAppointmentDTO> customerAppointmentOptional = customerAppointmentService.getNextAppointmentForCustomer(customerId);
+        log.debug("customerAppointmentOptional ={}", customerAppointmentOptional);
+
+        return customerAppointmentOptional;
+    }
+
+
+    /*
+     * Post a rating to the latest appointment
+     * */
+    @PostMapping("/customer/{customerId}/appointment")
+    public ResponseEntity<?> rateCustomerAppointment(@PathVariable int customerId) {
+        log.debug("rateCustomerAppointment start");
+
+        Optional<CustomerAppointmentDTO> customerAppointmentOptional = customerAppointmentService.getLastAppointmentForCustomer(customerId);
+        //Get latest appointment, if not return 204
+
+        log.debug("customerAppointmentOptional={}", customerAppointmentOptional);
+
+
+        return null;
+    }
+
 
 
     private CustomerAppointmentDTO getCustomerAppointmentDTOFromRequest(CustomerAppointment customerAppointment, Customer customer, Audiologist audiologist) {
