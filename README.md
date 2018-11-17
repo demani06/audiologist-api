@@ -15,7 +15,7 @@
     3. CustomerAppointment  (to hold the Customer appointments data)
 - Did not consider security to differentiate an audiologist and a customer, the assumption is that it is already done or not needed as mentioned in the requirements document
 - Exception handling to be done by the global exception handler
-- Logging to be done by Sl4j/logback  
+- Logging to be done by Sl4j/logback 
 
 
 ## API spec
@@ -32,11 +32,11 @@
 
 
 ## Procedure to run this application
-- Prerequisites are Java 1.8+, Git Bash Client
+- Prerequisites are Java 1.8+, Git Bash Client to download the project using git clone or can be downloaded manually as well
 - To build the application, clone the project and run the below command (from the folder where we can see the pom.xml) to build the jar
-    mvn clean install
+    **mvn clean install**
 - To run the application, please run the below command
-    mvn spring:boot-run
+    **mvn spring:boot-run**
 
 
 ## General Documentation about the API 
