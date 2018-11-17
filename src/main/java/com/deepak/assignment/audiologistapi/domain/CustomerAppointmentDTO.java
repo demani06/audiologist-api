@@ -27,7 +27,6 @@ public class CustomerAppointmentDTO {
     @Column(name = "customer_appointment_id")
     private int customerAppointmentId;
 
-
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     Customer customer;
@@ -40,5 +39,8 @@ public class CustomerAppointmentDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull
     private LocalDateTime appointmentTimeStamp;
+
+    private int rating;
+    private String ratingComments;
 
 }

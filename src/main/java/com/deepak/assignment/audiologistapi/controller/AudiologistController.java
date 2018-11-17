@@ -48,7 +48,7 @@ public class AudiologistController {
     }
 
     @PostMapping("/audiologist/appointment")
-    public ResponseEntity<?> createAppointments(@Valid @RequestBody CustomerAppointment customerAppointment) {
+    public ResponseEntity<String> createAppointments(@Valid @RequestBody CustomerAppointment customerAppointment) {
         log.debug("createAppointments start");
         //ToDO return 201 for created, 400 for any validations exceptions in the request, 500 for any server error
 
@@ -69,7 +69,7 @@ public class AudiologistController {
 
         CustomerAppointmentDTO customerAppointmentDTO = getCustomerAppointmentDTOFromRequest(customerAppointment, customerOptional.get(), audiologistOptional.get());
 
-        //Return 422 for parisng exceptions of the appointment date
+        //Return 422 for parsing exceptions of the appointment date
         if (customerAppointmentDTO == null) { //Some exception when parsing the amount and date fields
             return new ResponseEntity<String>("Parsing of the appointment date failed", responseHeaders, HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -118,16 +118,46 @@ public class AudiologistController {
      * Post a rating to the latest appointment
      * */
     @PostMapping("/customer/{customerId}/appointment")
-    public ResponseEntity<?> rateCustomerAppointment(@PathVariable int customerId) {
+    public ResponseEntity<String> rateCustomerAppointment(@PathVariable int customerId, @Valid @RequestBody CustomerAppointment customerAppointment) {
         log.debug("rateCustomerAppointment start");
 
+        HttpHeaders responseHeaders = new HttpHeaders();
+
         Optional<CustomerAppointmentDTO> customerAppointmentOptional = customerAppointmentService.getLastAppointmentForCustomer(customerId);
+
+        //Check if the customer exists in DB, else return 404 from the API
+        Optional<Customer> customerOptional = audiologistService.findCustomerById(customerAppointment.getCustomerId());
+
+        //Check if the audiologist exists in DB, else return 404 from the API
+        Optional<Audiologist> audiologistOptional = audiologistService.findAudiologistById(customerAppointment.getAudiologistId());
+
+        if (!customerOptional.isPresent()) {
+            return new ResponseEntity<String>("Customer not found in the application", responseHeaders, HttpStatus.NOT_FOUND);
+        }
+
+        if (!audiologistOptional.isPresent()) {
+            return new ResponseEntity<String>("Audiologist not found in the application", responseHeaders, HttpStatus.NOT_FOUND);
+        }
         //Get latest appointment, if not return 204
+
+        CustomerAppointmentDTO customerAppointmentDTO = getCustomerAppointmentDTOFromRequest(customerAppointment, customerOptional.get(), audiologistOptional.get());
 
         log.debug("customerAppointmentOptional={}", customerAppointmentOptional);
 
+        if (customerAppointmentOptional.isPresent()) {
+            log.info("saving rating for appointment...");
+            log.debug("customerAppointmentDTO={}", customerAppointmentDTO);
+            customerAppointmentOptional.get().setRating(customerAppointmentDTO.getRating());
+            customerAppointmentOptional.get().setRatingComments(customerAppointmentDTO.getRatingComments());
+            customerAppointmentService.saveAppointment(customerAppointmentOptional.get());
+        } else {
+            return new ResponseEntity<String>("No Appointments for the customer", responseHeaders, HttpStatus.NO_CONTENT);
+        }
 
-        return null;
+
+        //Return 201
+        return new ResponseEntity<String>("Successfully created the rating for appointment", responseHeaders, HttpStatus.CREATED);
+
     }
 
 
@@ -151,6 +181,8 @@ public class AudiologistController {
                 .appointmentTimeStamp(appointmentDateTime)
                 .customer(customer)
                 .audiologist(audiologist)
+                .rating(customerAppointment.getRating())
+                .ratingComments(customerAppointment.getRatingComments())
                 .build();
 
         return customerAppointmentDTO;
