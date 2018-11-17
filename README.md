@@ -4,18 +4,18 @@
 1. H2 database run externally - done
 2. Create Audiologist entity and save in customer appointments table - pending
 3. Apply Security - Pending
-4. Exception hanlding and test cases - pending
+4. Exception handling and test cases - pending
 5. Dockerise - Pending
 
-## Design considerations
-- Followed Domain driven design, so first step is design the Entities.
+## Few of the Design considerations
+- Followed Domain driven design, so first step is to design the Entities.
 - This project would be having following entities
     1. Audiologist (to hold the Audiologist data)
     2. Customer (to hold the Customer data)
     3. CustomerAppointment  (to hold the Customer appointments data)
-- 
-- Did not consider security
-- 
+- Did not consider security to differentiate an audiologist and a customer, the assumption is that it is already done or not needed as mentioned in the requirements document
+- Exception handling to be done by the global exception handler
+- Logging to be done by Sl4j/logback  
 
 ## API spec
 
