@@ -16,6 +16,7 @@
 - Did not consider security to differentiate an audiologist and a customer, the assumption is that it is already done or not needed as mentioned in the requirements document
 - Exception handling to be done by the global exception handler
 - Logging to be done by Sl4j/logback  
+- Minimum test coverage considering the time frame
 
 ## API spec
 
