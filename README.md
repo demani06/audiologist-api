@@ -36,7 +36,7 @@
 - To build the application, clone the project and run the below command (from the folder where we can see the pom.xml) to build the jar
     **mvn clean install**
 - To run the application, please run the below command
-    **mvn spring:boot-run**
+    **mvn spring-boot:run**
 
 
 ## General Documentation about the API 
