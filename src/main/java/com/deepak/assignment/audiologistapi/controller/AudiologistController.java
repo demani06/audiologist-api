@@ -73,7 +73,13 @@ public class AudiologistController {
         if (customerAppointmentDTO == null) { //Some exception when parsing the amount and date fields
             return new ResponseEntity<String>("Parsing of the appointment date failed", responseHeaders, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        customerAppointmentService.saveAppointment(customerAppointmentDTO);
+
+        CustomerAppointmentDTO appointmentDTO = customerAppointmentService.saveAppointment(customerAppointmentDTO);
+
+        //return 500
+        if (appointmentDTO == null) {
+            new ResponseEntity<String>("Some problem with saving the appointment", responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         // Response code 201
         return new ResponseEntity<String>("Successfully created the Appointment for customer", responseHeaders, HttpStatus.CREATED);

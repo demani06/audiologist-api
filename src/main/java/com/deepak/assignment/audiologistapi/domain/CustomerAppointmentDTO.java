@@ -36,7 +36,7 @@ public class CustomerAppointmentDTO {
     Audiologist audiologist;
 
     @JsonProperty("appointment_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull
     private LocalDateTime appointmentTimeStamp;
 

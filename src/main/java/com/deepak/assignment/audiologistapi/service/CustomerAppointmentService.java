@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 /*
- * Appointments service wrapper for Customer which interacts with Cutomer Appointment DB Repository
+ * Appointments service wrapper for Customer which interacts with Customer Appointment DB Repository
  * */
 
 @Slf4j
@@ -22,18 +22,18 @@ import java.util.Optional;
 public class CustomerAppointmentService {
 
     @Autowired
-    CustomerAppointmentRepository customerAppointmentRepository;
+    private CustomerAppointmentRepository customerAppointmentRepository;
 
 
-    public void saveAppointment(CustomerAppointmentDTO customerAppointmentDTO) {
-        customerAppointmentRepository.save(customerAppointmentDTO);
+    public CustomerAppointmentDTO saveAppointment(CustomerAppointmentDTO customerAppointmentDTO) {
+        return customerAppointmentRepository.save(customerAppointmentDTO);
     }
 
     public List<CustomerAppointmentResponse> getAllAppointments(int audiologistId, boolean fetchAllRecords) {
 
         log.info("Getting all appointments for audiologistId ={}", audiologistId);
         log.info("Getting all appointments , fetchAllRecords ={}", fetchAllRecords);
-        List<CustomerAppointmentDTO> customerAppointmentDTOList = null;
+        List<CustomerAppointmentDTO> customerAppointmentDTOList;
         if (fetchAllRecords) {
             customerAppointmentDTOList = customerAppointmentRepository.findByAudiologist_audiologistId(audiologistId);
         } else {
