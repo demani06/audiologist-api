@@ -1,13 +1,7 @@
 # audiologist-api
 
-## TODO
-1. H2 database run externally - done
-2. Create Audiologist entity and save in customer appointments table - pending
-3. Apply Security - Pending
-4. Exception handling and test cases - pending
-5. Dockerise - Pending
-
 ## Few of the Design considerations
+- App to be developed on Spring boot and Rest API
 - Followed Domain driven design, so first step is to design the Entities.
 - This project would be having following entities
     1. Audiologist (to hold the Audiologist data)
