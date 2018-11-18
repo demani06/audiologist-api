@@ -25,12 +25,21 @@
 
 
 
-## Procedure to run this application
+## Procedure to run this application without Docker
 - Prerequisites are Java 1.8+, Git Bash Client to download the project using git clone or can be downloaded manually as well
 - To build the application, clone the project and run the below command (from the folder where we can see the pom.xml) to build the jar
     **mvn clean install**
 - To run the application, please run the below command
     **mvn spring-boot:run**
+    
+## Procedure to run this application with Docker
+- Prerequisites are Docker installed on the machine
+- Run the following command to build the image from the base directory (where the  POM.xml and dockerfile resides)
+        - on Linux - **sh mvnw install dockerfile:build**
+        - on Windows - **mvnw install dockerfile:build**
+
+- Run the following command to build the image from the base directory (where the  POM.xml and dockerfile resides)
+       **docker run -d -p 8080:8080 springio/audiologist-api**
 
 
 ## General Documentation about the API 
